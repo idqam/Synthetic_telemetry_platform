@@ -51,6 +51,16 @@ func (o *Organism) RestoreEnergy(amount float64) float64 {
 	return restored
 }
 
+// ApplyCrowdingStress sets the organism's stress from region occupancy. Crowding
+// raises stress proportional to how full the region is; it never kills.
+func (o *Organism) ApplyCrowdingStress(ratio float64) {
+	if !o.Alive() {
+		return
+	}
+	o.Vitals.Stress = clamp(ratio, 0, 1)
+	o.Version++
+}
+
 func (o *Organism) ApplyMetabolism(
 	delta float64,
 	species *Species,
